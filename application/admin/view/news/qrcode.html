@@ -1,0 +1,362 @@
+{include file="publick/link"}
+<style>
+    .erimg {
+        height: 140px;
+        width: 140px;
+        float: left;
+        overflow: hidden;
+    }
+
+    .erimg img {
+        height: 100%;
+    }
+    .tui{
+        width: 120px;
+        height: 120px;
+    }
+
+    .tui img{
+        height: 100%;
+    }
+</style>
+
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+        <span class="c-gray en">&gt;</span>
+        系统管理
+        <span class="c-gray en">&gt;</span>
+        基本设置
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+            href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+    </nav>
+    <div class="page-container">
+        <div id="tab-system" class="HuiTab">
+            <div class="tabBar cl">
+                <span>收款码设置</span>
+                <span>文章推荐信息设置</span>
+            </div>
+            <div class="tabCon">
+                <article class="page-container">
+                    <form class="form form-horizontal" id="form-member-wx" action="" method="post"
+                        enctype="multipart/form-data">
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2">微信钱包二维码：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <span class="btn-upload form-group">
+                                    <span class="btn-upload form-group">
+                                        <input class="input-text upload-url radius" type="text" name="news_wx"
+                                            id="news_wx" value="{$er.news_wx}" readonly>
+                                        <a href="javascript:void();" class="btn btn-primary radius">
+                                            <i class="iconfont">&#xf0020;</i> 浏览文件</a>
+                                        <input type="file" multiple id="wx" name="file" class="input-file">
+                                    </span>
+                                    <button id="imgbtn"
+                                        class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row cl mb-10">
+                        <label class="form-label col-xs-4 col-sm-2">二维码预览：</label>
+                        <div class="formControls ju" id="wxqb">
+                            <div id="wximg" class="erimg">
+                                <img src="{$er.news_wx}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <form class="form form-horizontal" id="form-member-zfb" action="" method="post"
+                        enctype="multipart/form-data">
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2">支付宝二维码：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <span class="btn-upload form-group">
+                                    <span class="btn-upload form-group">
+                                        <input class="input-text upload-url radius" type="text" name="news_zfb"
+                                            id="news_zfb" value="{$er.news_zfb}" readonly>
+                                        <a href="javascript:void();" class="btn btn-primary radius">
+                                            <i class="iconfont">&#xf0020;</i> 浏览文件</a>
+                                        <input type="file" multiple id="zfb" name="file" class="input-file">
+                                    </span>
+                                    <button id="imgbtn"
+                                        class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row cl mb-10">
+                        <label class="form-label col-xs-4 col-sm-2">二维码预览：</label>
+                        <div class="formControls ju" id="zfbimg">
+                            <div id="zfber" class="erimg">
+                                <img src="{$er.news_zfb}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="tabCon">
+                <form class="form form-horizontal" id="form-member-tiu" action="" method="post"
+                    enctype="multipart/form-data">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">二维码名称：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" class="input-text" value="{$er.news_title}" placeholder="如博主的微信公众" id="news_title"
+                                name="news_title">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">二维码：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <span class="btn-upload form-group">
+                                <span class="btn-upload form-group">
+                                    <input class="input-text upload-url radius" type="text" name="news_gzh"
+                                        id="news_gzh" value="{$er.news_gzh}" readonly>
+                                    <a href="javascript:void();" class="btn btn-primary radius">
+                                        <i class="iconfont">&#xf0020;</i> 浏览文件</a>
+                                    <input type="file" multiple id="tui" name="file" class="input-file">
+                                </span>
+                        </div>
+                    </div>
+
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">二维码预览：</label>
+                        <div class="formControls col-xs-8 col-sm-9" id="tuier">
+                            <div id="tiuimg" class="tui">
+                                <img src="{$er.news_gzh}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">推荐信息简介：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <textarea name="news" id="news" cols="" rows="" class="textarea"
+                                placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true"
+                                nullmsg="备注不能为空！">{$er.news}</textarea>
+                            <p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
+                        </div>
+                    </div>
+                    <div class="row cl" style="text-align: center">
+                        <div class="login-btn">
+                                <button id="imgbtn" class="btn btn-default btn-uploadstar radius ml-10">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {include file="publick/footer"}
+    <!--/_footer /作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="__STATICA__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript" src="__STATICA__/lib/webuploader/0.1.5/webuploader.min.js"></script>
+    <script type="text/javascript" src="__STATICA__/lib/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATICA__/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+    <script type="text/javascript" src="__STATICA__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript">
+
+        jQuery.validator.addMethod("checkPic", function (value, element) {
+            var filepath = value;
+            var str = value;
+            //获得上传文件名
+            var fileArr = filepath.split("\\");
+            var fileTArr = fileArr[fileArr.length - 1].toLowerCase().split(".");
+            var filetype = fileTArr[fileTArr.length - 1];
+            //切割出后缀文件名
+            if (filetype == "png" || filetype == "jpg" || filetype == "gif") {
+                return true;
+            } else {
+                return false;
+            }
+        }, "上传图片格式不适合");
+        $(function () {
+            $('.skin-minimal input').iCheck({
+                checkboxClass: 'icheckbox-blue',
+                radioClass: 'iradio-blue',
+                increaseArea: '20%'
+            });
+
+            $("#tab-system").Huitab({
+                index: 0
+            });
+
+            $("#wx").change(function (e) {
+                var imgBox = e.target;
+                uploadImg($('#wximg'), imgBox)
+            });
+
+            function uploadImg(element, tag) {
+                var file = tag.files[0];
+                var imgSrc;
+                if (!/image\/\w+/.test(file.type)) {
+                    alert("看清楚，这个需要图片！");
+                    return false;
+                }
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    imgSrc = this.result;
+                    var imgs = document.createElement("img");
+                    $('#wxqb img').remove();
+                    $(imgs).attr("src", imgSrc);
+                    element.css({ "display": "block", });;
+                    element.append(imgs);
+                };
+            }
+
+            $("#zfb").change(function (e) {
+                var imgBox = e.target;
+                zfbImg($('#zfber'), imgBox)
+            });
+
+            function zfbImg(element, tag) {
+                var file = tag.files[0];
+                var imgSrc;
+                if (!/image\/\w+/.test(file.type)) {
+                    alert("看清楚，这个需要图片！");
+                    return false;
+                }
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    imgSrc = this.result;
+                    var imgs = document.createElement("img");
+                    $('#zfbimg img').remove();
+                    $(imgs).attr("src", imgSrc);
+                    element.css({ "display": "block", });;
+                    element.append(imgs);
+                };
+            }
+
+
+            $("#tui").change(function (e) {
+                var imgBox = e.target;
+                tuiImg($('#tiuimg'), imgBox)
+            });
+
+            function tuiImg(element, tag) {
+                var file = tag.files[0];
+                var imgSrc;
+                if (!/image\/\w+/.test(file.type)) {
+                    alert("看清楚，这个需要图片！");
+                    return false;
+                }
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    imgSrc = this.result;
+                    var imgs = document.createElement("img");
+                    $('#tiuimg img').remove();
+                    $(imgs).attr("src", imgSrc);
+                    element.css({ "display": "block", });;
+                    element.append(imgs);
+                };
+            }
+
+            //表单验证
+            $("#form-member-wx").validate({
+                rules: {
+                    wx_img: {
+                        required: true,
+                    },
+                    file: {
+                        checkPic: true,
+                    }
+                },
+                onkeyup: false,
+                focusCleanup: true,
+                success: "valid",
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: 'post',
+                        url: "{:url('NewsList/setQRCode')}",
+                        success: function (data) {
+                            if (data.error == 1) {
+                                layer.msg(data.msg, { icon: 6, time: 1000 });
+                            } else {
+                                layer.msg(data.msg, { icon: 5, time: 1000 });
+                            }
+                        },
+                        error: function (XmlHttpRequest, textStatus, errorThrown) {
+                            layer.msg('error!', { icon: 1, time: 1000 });
+                        }
+                    });
+                }
+            });
+
+
+            $("#form-member-zfb").validate({
+                rules: {
+                    zfb_img: {
+                        required: true,
+                    },
+                    file: {
+                        checkPic: true,
+                    }
+                },
+                onkeyup: false,
+                focusCleanup: true,
+                success: "valid",
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: 'post',
+                        url: "{:url('NewsList/setQRCode')}",
+                        success: function (data) {
+                            if (data.error == 1) {
+                                layer.msg(data.msg, { icon: 6, time: 1000 });
+                            } else {
+                                layer.msg(data.msg, { icon: 5, time: 1000 });
+                            }
+                        },
+                        error: function (XmlHttpRequest, textStatus, errorThrown) {
+                            layer.msg('error!', { icon: 1, time: 1000 });
+                        }
+                    });
+                }
+            });
+
+            $("#form-member-tiu").validate({
+                rules: {
+                    news_title:{
+                        required: true,
+                        maxlength: 18,
+                    },
+                    news_gzh: {
+                        required: true,
+                    },
+                    news:{
+                        required: true,
+                        maxlength: 90,
+                    },
+                },
+                onkeyup: false,
+                focusCleanup: true,
+                success: "valid",
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: 'post',
+                        url: "{:url('NewsList/recommend')}",
+                        success: function (data) {
+                          
+                           if (data.error == 1) {
+                                layer.msg(data.msg, { icon: 6, time: 1000 });
+                            } else {
+                                layer.msg(data.msg, { icon: 5, time: 1000 });
+                            }
+                        },
+                        error: function (XmlHttpRequest, textStatus, errorThrown) {
+                            layer.msg('error!', { icon: 1, time: 1000 });
+                        }
+                    });
+                }
+            });
+
+            var ue = UE.getEditor('editor');
+
+        });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+
+</html>

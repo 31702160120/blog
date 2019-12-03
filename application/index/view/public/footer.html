@@ -1,0 +1,70 @@
+<div class="broadside ">
+    <ul>
+        <li><a href="javascript:;" id="top"><i class="Hui-iconfont">&#xe6d6;</i></a></li>
+        <li><a href="javascript:;" id="foot"><i class="Hui-iconfont">&#xe6d5;</i></a></li>
+</div>
+<footer class="footer mt-20">
+    <div class="container-fluid">
+        <p>{$stem.copyright} <br>
+            <a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">{$stem.record}</a><br>
+        </p>
+    </div>
+</footer>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#top').click(function () {
+            $('html,body').animate({ scrollTop: '0px' }, 1000);
+            return false;
+        });
+
+        var windowHeight = parseInt($("body").css("height"));
+        $('#foot').click(function () {
+            $('html, body').animate({
+                scrollTop: windowHeight
+            }, 1500);
+            return false;
+        });
+
+    admin_add = function (url) {
+        layer.open({
+            type: 2,
+            title: false,
+            closeBtn: 1, //不显示关闭按钮
+            shade: [0.5],
+            area: ['460px', '400px'],
+            offset: 'cb', //右下角弹出
+            anim: 2,
+            content: [url, 'no'], //iframe的url，no代表不显示滚动条
+            end: function () {
+                window.location.reload();//写在这里的话不管是否提交成功都会刷新这个页面 
+                return false;
+            }
+        });
+    }
+
+    getout = function () {
+        $.ajax({
+            url: "{:url('User/getOut')}",
+            type: 'post',
+            cache: false,//false是不缓存，true为缓存
+            async: true,//true为异步，false为同步
+            success: function (data) {
+                if (data.error == 1) {
+                    top.location.reload();
+                } else {
+                    layer.msg('退出失败', { icon: 5, time: 1000 });
+                }
+            },
+            error: function () {
+                //请求失败时
+            }
+        });
+    }
+    });
+
+
+
+</script>

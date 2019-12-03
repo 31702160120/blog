@@ -1,0 +1,171 @@
+﻿{include file="publick/link"}
+	<style>
+		.welcome-head {
+			height: 60px;
+			background-color: rgba(238, 238, 238, 0.98);
+			padding: 10px;
+		}
+
+		.welcome-head-news {
+			height: 60px;
+			background-color: #fff;
+			border-left: 5px solid #5a98de;
+		}
+
+		.welcome-head-news p {
+			line-height: 60px;
+			padding-left: 20px;
+		}
+
+		.welcome-head-news .nane {
+			color: red;
+		}
+
+		.welcome-data {
+			margin-top: 20px;
+			border: 1px solid rgba(238, 238, 238, 0.98);
+			height: 150px;
+		}
+
+		.welcome-data-time {
+			padding: 10px;
+			border-bottom: 1px solid rgba(238, 238, 238, 0.98);
+			font-size: 16px;
+		}
+
+		.welcome-data ul {
+			padding-left: 10px;
+			height: 80px;
+			display: flex;
+		}
+
+		.welcome-data ul li {
+			margin-right: 10px;
+			flex: 1;
+			background-color: rgba(238, 238, 238, 0.98);
+			padding: 10px;
+		}
+
+		.welcome-data-news p {
+			color: #999;
+		}
+
+		.welcome-data-news span {
+			font-size: 20px;
+			color: #5a98de;
+		}
+
+		.welcome-data-news:hover {
+			background-color: #CFCFCF;
+		}
+
+		.welcome-data-news:hover p {
+			color: #888;
+		}
+	</style>
+<body>
+	<div class="page-container bei">
+		<div class="welcome-head">
+			<div class="welcome-head-news">
+				<p>欢迎管理员: <span class="nane"> {$name}</span> 当前时间: <span id="time"></span></p>
+			</div>
+		</div>
+
+		<div class="welcome-data">
+			<p class="welcome-data-time">数据统计</p>
+			<ul>
+				<li class="welcome-data-news">
+					<p>文章数</p>
+					<span>
+						{$newsNumb}
+					</span>
+				</li>
+				<li class="welcome-data-news">
+					<p>粉丝数</p>
+					<span>
+						{$userNumb}
+					</span>
+				</li>
+				<li class="welcome-data-news">
+					<p>评论数</p>
+					<span>
+						{$num}
+					</span>
+				</li>
+				<li class="welcome-data-news">
+					<p>被封禁用户数</p>
+					<span>
+						{$userNumb2}
+					</span>
+				</li>
+				<li class="welcome-data-news">
+					<p>未过审评论数</p>
+					<span>
+							{$num2}
+					</span>
+				</li>
+			</ul>
+		</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+			<thead>
+				<tr>
+					<th colspan="2" scope="col">系统信息</th>
+				</tr>
+			</thead>
+			<tbody>
+				{volist name="info" id="v"}
+				<tr>
+					<th>{$key}</th>
+					<td>{$v}</td>
+				</tr>
+				{/volist}
+			</tbody>
+		</table>
+	</div>
+	<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="__STATICA__/static/h-ui/js/H-ui.min.js"></script>
+	<!--此乃百度统计代码，请自行删除-->
+	<script>
+		 window.onload = function(){
+      	showTime();
+    }
+    function showTime(){
+    var myDate = new Date();
+    var year = myDate.getFullYear();
+    var month = myDate.getMonth() + 1;
+    var date = myDate.getDate();
+    var dayArray = new Array(7);
+    dayArray[0] = " 星期日 ";
+    dayArray[1] = " 星期一 ";
+    dayArray[2] = " 星期二 ";
+    dayArray[3] = " 星期三 ";
+    dayArray[4] = " 星期四 ";
+    dayArray[5] = " 星期五 ";
+    dayArray[6] = " 星期六 ";
+    var day1 = myDate.getDay();
+    var day = dayArray[day1];
+    var hour = myDate.getHours();
+    var minute = myDate.getMinutes();
+    var second = myDate.getSeconds();
+    var min = checkTime(minute);
+    var sec = checkTime(second);
+    var time1 = year + " 年 " + month + " 月 " + date + "日 ";
+    var time2 = hour + "：" + min + "：" + sec;
+    // document.write(time1+day+time2);
+    //用js方法
+     document.getElementById("time").innerHTML = time1+day+time2;
+    //用jquery方法
+    $('#time').text(time1+day+time2);
+    setTimeout("showTime()",500);
+    }
+    function checkTime(i){
+      if(i<10){
+        i = "0" + i;
+      }
+      return i;
+    }
+	</script>
+	<!--/此乃百度统计代码，请自行删除-->
+</body>
+
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <!--[if lt IE 9]> 
+<script type="text/javascript" src="Lib/html5.js"></script>
+<script type="text/javascript" src="Lib/respond.min.js"></script>
+<![endif]-->
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/comment.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/personal.css">
+    <!--自己的样式-->
+    <!--[if IE 6]> 
+<script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+<![endif]-->
+</head>
+<!-- 头部 -->
+
+<body>
+    {include file="public/head" /}
+
+    <div class="main">
+        <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> <a class="maincolor"
+                href="{:url('index/index')}">首页</a><span class="c-666 en">&gt;</span><span class="c-666">我的信息</span>
+        </nav>
+        <!-- 栏目文章 -->
+        <div class="main-personal">
+            <div class="personalL">
+                <ul class="personalL-ul">
+                    <li class="personalL-news" num="1"> <i class="Hui-iconfont">&#xe602;</i> 我的信息</li>
+                    <li class="personalL-news" num="2"><i class="Hui-iconfont">&#xe705;</i> 修改资料</li>
+                    <li class="personalL-news one" num="3"><i class="Hui-iconfont">&#xe705;</i> 历史记录</li>
+                </ul>
+            </div>
+            <div class="personalR">
+                <ul class="personalR-ul">
+                    <!-- 我的资料 -->
+                    <li class="personalR-news ones">
+                        <h4>我的资料</h4>
+                        <div class="ones-img">
+                            <p class="ones-time">今天是&nbsp;{php} echo date("y年m月d日");{/php}&nbsp; 星期{$date}</p>
+                            <div class="ones-tou">
+                                <img src="__STATIC__/img/tou.png" alt="">
+                            </div>
+                            <div class="ones-user">
+                                <p>欢迎回来!</p>
+                                <p class="user-name">{$name}</p>
+                            </div>
+
+                            <!-- 登出 -->
+                            <a href="javascript:;" onclick="getout();" class="tui">登出</a>
+                        </div>
+                        <table class="table table-border table-bordered">
+                            <tr class="text-c">
+                                <th>用户名</th>
+                                <td>{$result.username}</td>
+                            </tr>
+                            <tr class="text-c">
+                                    <th>昵称</th>
+                                    <td>{$result.ni}</td>
+                                </tr>
+                            <tr class="text-c">
+                                <th>邮箱</th>
+                                <td>{$result.email}</td>
+                            </tr>
+                            <tr class="text-c">
+                                <th>注册时间</th>
+                                <td>{$result.create_time}</td>
+                            </tr>
+                        </table>
+                    </li>
+                    <!-- 修改资料 -->
+                    <li class="personalR-news twos">
+                        <h4>修改资料</h4>
+                        <div>
+                            <form action="" method="post" id="message">
+                                <div class="row cl mb-10">
+                                    <label class="form-label col-xs-4 col-sm-3">邮箱</label>
+                                    <div class="formControls col-xs-8 col-sm-9">
+                                        <input type="text" class="input-text" value="{$result.email}" placeholder=""
+                                            id="email" name="email" οnfοcus="this.removeAttribute('readonly');">
+                                    </div>
+                                </div>
+                                <div class="row cl mb-10">
+                                        <label class="form-label col-xs-4 col-sm-3">昵称</label>
+                                        <div class="formControls col-xs-8 col-sm-9">
+                                            <input type="text" class="input-text" value="{$result.ni}" placeholder="填写昵称昵称不能大于8个字符"
+                                                id="ni" name="ni" οnfοcus="this.removeAttribute('readonly');">
+                                        </div>
+                                    </div>
+                                <div class="row cl mb-10">
+                                    <label class="form-label col-xs-4 col-sm-3">旧密码</label>
+                                    <div class="formControls col-xs-8 col-sm-9">
+                                            <input type="text" name="name" value="admin" style="position: absolute;z-index: -1;"
+                                            disabled autocomplete="off" /><!-- 这个username会被浏览器记住，我随便用个admin-->
+                                        <input type="password" name="pwd" value=" " style="position: absolute;z-index: -1;" disabled
+                                            autocomplete="off" />
+                                        <input type="password" class="input-text" value="" placeholder="需要修改密码时才填写此项" id="password"
+                                            name="password" οnfοcus="this.removeAttribute('readonly');">
+                                    </div>
+                                </div>
+                                <div class="row cl mb-10">
+                                    <label class="form-label col-xs-4 col-sm-3">新密码</label>
+                                    <div class="formControls col-xs-8 col-sm-9">
+                                        <input type="password" class="input-text" value="" placeholder="" id="password1"
+                                            name="password1" οnfοcus="this.removeAttribute('readonly');">
+                                    </div>
+                                </div>
+                                <div class="row cl mb-10">
+                                    <label class="form-label col-xs-4 col-sm-3">确认密码</label>
+                                    <div class="formControls col-xs-8 col-sm-9">
+                                        <input type="password" class="input-text" value="" placeholder="" id="password2"
+                                            name="password2" οnfοcus="this.removeAttribute('readonly');">
+                                    </div>
+                                </div>
+                                <div class="row cl">
+                                    <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                                        <input class="btn btn-primary radius" onclick="" type="submit"
+                                            value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="personalR-news three xian">
+                        <h4>历史记录</h4>
+                        <ul class="personalR-history">
+                            {volist name="relieve" id="vo"}
+                            <li>
+                                <span class="history-time">
+                                        {$vo.time|date="m月d日",###}
+                                </span>
+                                <p class="history-title text-overflow">
+                                    <a href="{:url('Lists/index',['id' => $vo.nid])}">
+                                        {$vo.name}
+                                    </a>
+                                </p>
+                                {eq name="vo.status" value="-1"}
+                                <a class="btn btn-success radius history-btn" href="javascript:;"
+                                    onclick="relieve(this,'{$vo.id}');">解除屏蔽</a>
+                                {/eq}
+                            </li>
+                            {/volist}
+                            <div class="">
+                            {$relieve->render()}
+                        </div>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!-- 尾部 -->
+    {include file="public/footer" /}
+</body>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__STATICA__/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__STATICA__/static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".personalL-news").click(function () {
+            $(".personalL-news").find("i").css({ "color": "#000" });
+            $(".personalL-news").css({ "border-left": "none" });
+            $(this).css({
+                "color": "blac",
+                "border-left": "3px solid #3690cf"
+            });
+            $(this).find("i").css({ "color": "#3690cf" });
+            var num = $(this).attr("num");
+            if (num == 1) {
+                $(".ones").css({ "display": "block" });
+                $(".twos").css({ "display": "none" });
+                $(".three").css({ "display": "none" });
+            } else if (num == 3) {
+                $(".ones").css({ "display": "none" });
+                $(".twos").css({ "display": "none" });
+                $(".three").css({ "display": "block" });
+            } else {
+                $(".twos").css({ "display": "block" });
+                $(".ones").css({ "display": "none" });
+                $(".three").css({ "display": "none" });
+            }
+        });
+
+        $("#message").validate({
+            rules: {
+                email: {
+                    required: true,
+                    email:true,
+                },
+                ni:{
+                    required: true,
+                    maxlength:8,
+                }
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    type: 'post',
+                    url: "{:url('Personal/alterUser')}",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.error == 1) {
+                            layer.msg(data.msg, { icon: 6, time: 1000 });
+                            setTimeout(function () {
+                                top.location.reload();
+                            }, 1000);
+                        } else {
+                            layer.msg(data.msg, { icon: 5, time: 1000 });
+                        }
+                    },
+                    error: function (XmlHttpRequest, textStatus, errorThrown) {
+                        layer.msg('链接失败', { icon: 5, time: 1000 });
+                    }
+                });
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.$('.btn-refresh').click();
+                parent.layer.close(index);
+            }
+        });
+
+        relieve = function(obj, id){
+            layer.confirm('确认要解除屏蔽吗？', function (index) {
+                $.ajax({
+                url: '{:url("Personal/AlterRelieve")}',
+                type: 'post',
+                // 设置的是请求参数
+                data: { 'id' : id },
+                // 用于设置响应体的类型 注意 跟 data 参数没关系！！！
+                dataType: 'json',
+                success: function (data) {
+                    if (data.error == 1) {
+                        layer.msg(data.msg, { icon: 6, time: 1000 });
+                        $(obj).remove();
+                    } else {
+                        layer.msg(data.msg, { icon: 5, time: 1000 });
+                    }
+                }
+            })
+            });   
+               
+       }
+
+    });
+</script>
+</body>
+
+</html>

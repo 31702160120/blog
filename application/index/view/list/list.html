@@ -1,0 +1,465 @@
+{include file="public/head" /}
+
+<div class="main">
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> <a class="maincolor"
+            href="{:url('index/index')}">首页</a><span class="c-666 en">&gt;</span>{$colummName.column_name}<span
+            class="c-666 en">&gt;</span><span class="c-666">{$news.news_name}</span></nav>
+    <!-- 文章内容 -->
+    <div class="main-list ">
+        <!-- 标题 -->
+        <div class="list-title">
+            <h3>{$news.news_name}</h3>
+            <span><i class="Hui-iconfont">&#xe690;</i> {$news.news_time|date="y-m-d",###}</span>
+            <span><i class="Hui-iconfont">&#xe62c;</i> {$news.news_author}</span>
+            <span><i class="Hui-iconfont">&#xe725;</i> {$news.news_hits}</span>
+        </div>
+        <div class="list-label">
+            <div class="Hui-tags-list">
+                <div class="Hui-tags-has list-label-title">
+                    {$news.news_label|label=###,url('Column/label')}
+                </div>
+            </div>
+        </div>
+        <div class="list-news">
+            {$news.news|html_entity_decode}
+        </div>
+
+        <!-- 版权 -->
+        <div class="list-zuo">
+            <div class="list-zuo-img">
+                <img src="{$copyright.news_gzh}" alt="">
+            </div>
+            <div class="list-zuo-news">
+                <p class="zuo-news">{$copyright.news_title}</p>
+                <p class="zuo-data">{$copyright.news}</p>
+            </div>
+        </div>
+
+        <!-- 点赞 -->
+        <div class="list-hits">
+            <div class="list-hits-news">
+                <span id="praise" num="{$praise}" nid="{$news.id}">
+                    <a href="javascript:;" class="hist-btn">
+                        <i class="Hui-iconfont ml-20">&#xe697;</i>
+                        赞 <b id="praisenum">{$news.news_praise}</b>
+                    </a>
+                </span>
+                <span id="degrade">
+                    {eq name="status" value=''}
+                    <a href="javascript:;" class="hist-btn">
+                        {else/}
+                        <a href="javascript:;" class="hist-btn" onclick="shield('{$news.id}')">
+                            {/eq}
+                            <i class="Hui-iconfont ml-50">&#xe60b;</i>
+                            屏蔽</a>
+                </span>
+                <div>
+                    <div class="list-yuan" id="yuang">
+                        <span></span>
+                    </div>
+                    <span class="list-ma" id="er">
+                        <h4 class="list-ma-title">
+                            <i class="Hui-iconfont">&#xe648;</i>
+                            你可以选择一种方式赞助本站
+                        </h4>
+                        <div class="list-ma-img">
+                            <ul>
+                                <li class="ma-img-li">
+                                    <div class="img-li-span">
+                                        <img src="{$copyright.news_zfb}">
+                                    </div>
+                                    <p class="img-li-p">支付宝扫一扫赞助</p>
+                                </li>
+                                <li class="ma-img-li">
+                                    <div class="img-li-span">
+                                        <img src="{$copyright.news_wx}">
+                                    </div>
+                                    <p class="img-li-p">微信钱包扫一扫赞助</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </span>
+                    <span class="list-er">
+                        <a href="" id="shang">赏</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 上下一篇 -->
+    <div class="list-select">
+        <ul>
+            <li class="select-news">
+                <a href="{:url('lists/index',['id'=> $upNews.id])}">
+                    <p><i class="Hui-iconfont">&#xe6d4;</i> 上一篇</p>
+                    <p>{$upNews.news_name}</p>
+                </a>
+            </li>
+            <li class="select-news">
+                <a href="{:url('lists/index',['id'=> $belowNews.id])}">
+                    <p>下一篇 <i class="Hui-iconfont">&#xe6d7;</i></p>
+                    <p>{$belowNews.news_name}</p>
+                </a></li>
+        </ul>
+    </div>
+    {eq name="news.news_comment" value="1"}
+    <div class="comment comment-default pinl">
+        <div class="comment-body">
+            <h4>发表评论</h4>
+            <!-- 登录信息 -->
+            {neq name='message["name"]' value=""}
+            <div class="comment-login">
+                <img src="{$message['img']}" alt="">
+                <p>登录者：<a href="">{$message["name"]} ({$message["logo"]})</a></p>
+                <p><a href="javascript:;" onclick="getout();">登出</a></p>
+            </div>
+            <!-- 评论框 -->
+            <div class="comment-frame">
+                <form action="" method="post" id="comment-form">
+                    <input type="hidden" name="comment_nid" value="{$news.id}">
+                    <textarea class="comment-news textarea" name="comment_news" id="comment_news" cols="30" rows="10"
+                        placeholder="请输入留言内容"></textarea>
+                    <button type="submit" class="btn btn-default radius">提交评论</button>
+                </form>
+            </div>
+            {else/}
+            <div class="comment-no">
+                <p>您必须
+                    <a href="javascript:;" onclick="admin_add('{:url('User/index')}')">登录</a>
+                    才能发表评论！</p>
+            </div>
+            {/neq}
+        </div>
+    </div>
+
+    <!-- 评论数量 -->
+    <div class="comment-num pinlx">
+        <h2>目前评论：{$gross} 其中：访客 {$visitor} 博主 {$blogger}</h2>
+    </div>
+
+    <!-- 详细评论 -->
+    <div class="comment-list pinl">
+        <ul class="comment-content-father">
+            {volist name="data" id="vo"}
+            {eq name="$vo.comment_pid" value="0"}
+            <li class="comment-content mt-10">
+                <div class="content-news">
+                    <img src="{$vo.user_img}" alt="">
+                    <span class="nc">{$vo.ni} ({$vo.namestatus})</span>
+                    <br>
+                    <span class="nc">{$vo.comment_time|date="y-m-d",###}</span>
+                    <br>
+                    <span>{$vo.comment_news}</span>
+                    {neq name='message["name"]' value=""}
+                    <a class="comment-reply" num="1" onclick="newsHui(this,{$vo.id});">回复</a>
+                    {else/}
+                    <a class="comment-reply" href="javascript:;" onclick="admin_add('{:url('User/index')}')">登陆</a>
+                    {/neq}
+                </div>
+            </li>
+            {else/}
+            <li class="comment-content">
+                <div class="content-news  ml-20" style="width: 90%;">
+                    <img class="ml-20" src="{$vo.user_img}" alt="">
+                    <span class="nc">{$vo.ni} ({$vo.namestatus})</span>
+                    <br>
+                    <span class="nc">{$vo.comment_time|date="y-m-d",###}</span>
+                    <br>
+                    <span>{$vo.comment_news}</span>
+                    {neq name='message["name"]' value=""}
+                    <a class="comment-reply" num="1" onclick="newsHui(this,{$vo.id});">回复</a>
+                    {else/}
+                    <a class="comment-reply" href="javascript:;" onclick="admin_add('{:url('User/index')}')">登陆</a>
+                    {/neq}
+                </div>
+            </li>
+            {/eq}
+            {/volist}
+        </ul>
+    </div>
+
+    <div class="">
+        {$result->render()}
+    </div>
+    {else/}
+    <div class="comment comment-default pinl">
+        <div class="comment-body">
+            <div class="comment-no">
+                <p>评论已关闭！</p>
+            </div>
+        </div>
+    </div>
+    {/eq}
+    <div class="wei">
+        <div class="list-ce">
+            <div class="main-mainR f-r">
+                <!-- 排行 -->
+                <div class="mainR mainR-default">
+                    <div class="mainR-header">
+                        <i class="Hui-iconfont f-16">&#xe68b; </i>
+                        阅读榜
+                    </div>
+                    <ul>
+                        {volist name="love" id="vo"}
+                        <li class="mainR-love">
+                            <b class="mainR-love-title" id="love">
+                                <a href="{:url('Lists/index',['id'=> $vo.id])}" target="_blank">{$vo.news_name}</a>
+                            </b>
+                            <span class="mainR-loveR">
+                                <p class="mainR-love-news">
+                                    <i>
+                                        <img src="{$vo.news_img}" alt="">
+                                    </i>
+                                </p>
+                                <p class="mainR-love-newsR">
+                                    {$vo.news_intro}
+                                </p>
+                            </span>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+
+                <!-- 友情链接 -->
+
+                <div class="articleR-link">
+                    <div class="articleR-link-header">
+                        <i class="Hui-iconfont f-16 ">&#xe666; </i>
+                        友情链接
+                    </div>
+                    <div class="articleR-link-body">
+                        <ui>
+                            {volist name="link" id="vo"}
+                            <li><a href="{$vo.link_url}" target="_blank">{$vo.link_name}</a></li>
+                            {/volist}
+                        </ui>
+                    </div>
+                </div>
+
+                <!-- 个人微信 -->
+                <div class="articleR-wx">
+                    <div class="articleR-wx-header">
+                        <i class="Hui-iconfont f-18 c-green">&#xe694; </i>
+                        个人微信
+                    </div>
+                    <div class="articleR-wx-body">
+                        <img src="{$wx['admin_wximg']}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 尾部 -->
+{include file="public/footer" /}
+
+</body>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__STATICA__/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__STATICA__/static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script>
+    $(document).ready(function () {
+        var height = $(document).height();
+        if (height < 900) {
+            $('.wei').attr('style','margin-bottom:582px')
+        }else if(height < 1400){
+            $('.wei').attr('style','margin-bottom:200px')
+        }else if(height < 1500){
+            $('.wei').attr('style','margin-bottom:300px')
+        }
+        $("#comment-form").validate({
+            rules: {
+                comment_news: {
+                    required: true,
+                    maxlength: 100,
+                },
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    type: 'post',
+                    url: "{:url('Gbook/setComment')}",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.error == 1) {
+                            layer.msg(data.msg, { icon: 6, time: 1000 });
+                            setTimeout(function () {
+                                top.location.reload();
+                            }, 1000);
+                        } else {
+                            layer.msg(data.msg, { icon: 5, time: 1000 });
+                        }
+                    },
+                    error: function (XmlHttpRequest, textStatus, errorThrown) {
+                        layer.msg('链接失败', { icon: 5, time: 1000 });
+                    }
+                });
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.$('.btn-refresh').click();
+                parent.layer.close(index);
+            }
+        });
+
+        newsHui = function (obj, id) {
+            var num = $(obj).attr("num");
+            if (num == 1) {
+                $(obj).parent().append('<div class="content-reply"><form id="loginForm"><input type="hidden" name="comment_pid" value="' + id + '"> <textarea class="comment-news textarea" name="comment_news" id="comment_news" cols="30" rows="10"placeholder="请输入留言内容"></textarea></form><button  onclick="newsLigin();" class="content-reply-btn">回复</button></div>');
+                $(obj).text("取消");
+                $(obj).attr("num", "2");
+            } else {
+                $(".content-reply").remove();
+                $(obj).text("回复");
+                $(obj).attr("num", "1");
+            }
+        }
+
+
+        newsLigin = function () {
+            var data = $('#loginForm').serialize();
+            //序列化获得表单数据
+            var submitData = decodeURIComponent(data, true);
+            //submitData是解码后的表单数据，结果同上
+            $.ajax({
+                url: "{:url('Gbook/setReply')}",
+                type: 'post',
+                data: submitData,
+                cache: false,//false是不缓存，true为缓存
+                async: true,//true为异步，false为同步
+                success: function (data) {
+                    if (data.error == 1) {
+                        layer.msg(data.msg, { icon: 6, time: 1000 });
+                        setTimeout(function () {
+                            top.location.reload();
+                        }, 1000);
+                    } else {
+                        layer.msg(data.msg, { icon: 5, time: 1000 });
+                    }
+                },
+                error: function () {
+                    //请求失败时
+                }
+            })
+        }
+
+
+        $("#shang").hover(function () {
+            $("#praise").css("display", "none");
+            $("#degrade").css("display", "none");
+            $("#yuang").css("display", "none");
+            $("#er").fadeIn();
+        }, function () {
+            $("#praise").css("display", "block");
+            $("#degrade").css("display", "block");
+            $("#yuang").css("display", "block");
+            $("#er").fadeOut();
+        });
+
+
+
+    });
+
+    (function ($) {
+        $.extend({
+            tipsBox: function (options) {
+                options = $.extend({
+                    obj: null,  //jq对象，要在那个html标签上显示
+                    str: "+1",  //字符串，要显示的内容;也可以传一段html，如: "<b style='font-family:Microsoft YaHei;'>+1</b>"
+                    startSize: "12px",  //动画开始的文字大小
+                    endSize: "30px",    //动画结束的文字大小
+                    interval: 600,  //动画时间间隔
+                    color: "red",    //文字颜色
+                    callback: function () {
+                    }    //回调函数
+                }, options);
+                $("body").append("<span class='num'>" + options.str + "</span>");
+                var box = $(".num");
+                var left = options.obj.offset().left + options.obj.width() / 2;
+                var top = options.obj.offset().top - options.obj.height();
+                box.css({
+                    "position": "absolute",
+                    "left": left + "px",
+                    "top": top + "px",
+                    "z-index": 9999,
+                    "font-size": options.startSize,
+                    "line-height": options.endSize,
+                    "color": options.color
+                });
+                box.animate({
+                    "font-size": options.endSize,
+                    "opacity": "0",
+                    "top": top - parseInt(options.endSize) + "px"
+                }, options.interval, function () {
+                    box.remove();
+                    options.callback();
+                });
+            }
+        });
+    })(jQuery);
+
+    $(function () {
+        $("#praise").click(function () {
+            var dian = $(this).attr('num');
+            var nid = $(this).attr('nid');
+            var num = $("#praisenum").text();
+            if (dian == 0) {
+                $.tipsBox({
+                    obj: $(this),
+                    str: "+1",
+                    callback: function () {
+                        $("#praisenum").text(++num);
+                        $("#praise").attr('num', '1');
+                        zan(nid);
+                    }
+                });
+            } else {
+                layer.msg('你已点过赞', { icon: 6, time: 1000 });
+            }
+
+        });
+
+        zan = function (nid) {
+            $.ajax({
+                url: '{:url("Lists/praise")}',
+                type: 'get',
+                // 设置的是请求参数
+                data: { 'nid': nid },
+                // 用于设置响应体的类型 注意 跟 data 参数没关系！！！
+                dataType: 'json',
+                success: function (data) {
+
+                }
+            })
+        }
+
+        shield = function (id) {
+            layer.confirm('确认要屏蔽该文章吗？', function (index) {
+                $.ajax({
+                    url: '{:url("Lists/shield")}',
+                    type: 'get',
+                    // 设置的是请求参数
+                    data: { 'id': id },
+                    // 用于设置响应体的类型 注意 跟 data 参数没关系！！！
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.error == 0) {
+                            layer.msg(data.msg, { icon: 6, time: 1000 });
+                        } else {
+                            layer.msg(data.msg, { icon: 5, time: 1000 });
+                        }
+                    }
+                });
+            });
+        }
+
+    });
+
+</script>
+
+</html>

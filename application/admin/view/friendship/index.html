@@ -1,0 +1,264 @@
+﻿{include file="publick/link"}
+	<style>
+	.pagination {
+    width: auto;
+    height: auto;
+    color: #333;
+    font-size: 15px;
+    float: right;
+    display: block;
+    margin-top: 30px;
+}
+
+.pagination:hover {
+    cursor: pointer;
+}
+
+.pagination li {
+    width: auto;
+    height: auto;
+    float: left;
+    padding: 2px 6px 2px 6px;
+    border: 1px solid #333333;
+    display: block;
+    margin-right: 10px;
+    text-align: center;
+    border-radius: 15%;
+}
+
+.pagination li.active {
+    background: #5a98de;
+    color: #fff;
+    border: 1px solid #5a98de;
+}
+	</style>
+
+<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span
+			class="c-gray en">&gt;</span> 友情链接管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+			href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="page-container">
+		<div class="cl pd-5 bg-1 bk-gray mt-20">
+			 <span class="l">
+				 <a href="javascript:;" onclick="datadel()"class="btn btn-danger radius">
+					<i class="Hui-iconfont">&#xe6e2;</i> 
+					批量删除
+				</a>
+				<a href="javascript:;" class="btn btn-primary radius"
+				onclick="member_add('添加栏目','{:url('FriendshipList/friendshipAdd')}','','510')" >
+					 <i class="Hui-iconfont">&#xe600;</i> 
+					 添加友情链接</a></span>
+				 <span class="r">共有数据：<strong>{$num}</strong>
+				条</span> 
+		</div>
+		<div class="mt-20">
+			<table class="table table-border table-bordered table-bg">
+				<thead>
+					<tr class="text-c">
+						<th width="25"><input type="checkbox" name="" value=""></th>
+						<th width="80">ID</th>
+						<th width="100">链接名</th>
+						<th width=""></th>链接地址</th>
+						<th width="70">状态</th>
+						<th width="100">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{volist name="data" id="vo"}
+					<tr class="text-c">
+							<td><input type="checkbox" value="{$vo.id}" name="link_id" id="link_id"></td>
+							<td>{$vo.id}</td>
+							<td>{$vo.link_name}</td>
+							<td ><a href="{$vo.link_url}" target="view_window" >{$vo.link_url}</a></td>
+							<td class="td-status">
+								{$vo.link_status|otherStatus}
+							</td>
+							<td class="td-manage">
+								{eq name="$vo.link_status" value="0"}
+									<a style="text-decoration:none" onClick="member_start(this,{$vo.id}, {$vo.link_status})" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>
+								{else/}
+									<a style="text-decoration:none" onClick="member_stop(this,{$vo.id}, {$vo.link_status})" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>
+								{/eq}	
+								<a title="编辑" href="javascript:;"  class="ml-5" style="text-decoration:none"
+									onclick="member_edit('编辑链接','{:url('FriendshipList/friendshipAlter',['id' => $vo.id])}')">
+									<i class="Hui-iconfont">&#xe6df;</i>
+								</a> 
+								<a title="删除" href="javascript:;" class="ml-5" style="text-decoration:none"
+									onclick="member_del(this,{$vo.id})"><i class="Hui-iconfont">&#xe6e2;</i>
+								</a>
+							</td>
+					</tr>
+				{/volist}	
+				</tbody>
+			</table>
+		</div>
+		<div class="">
+				{$data->render()}
+		</div>
+	</div>
+	<!--_footer 作为公共模版分离出去-->
+	{include file="publick/footer"}
+	<!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="__STATICA__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+	<script type="text/javascript" src="__STATICA__/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="__STATICA__/lib/laypage/1.2/laypage.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('.table-sort').dataTable({
+				"aaSorting": [[1, "desc"]],//默认第几个排序
+				"bStateSave": true,//状态保存
+				"aoColumnDefs": [
+					//{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+					{ "orderable": false, "aTargets": [0, 8, 9] }// 制定列不参与排序
+				]
+			});
+
+		});
+		/*用户-添加*/
+		function member_add(title, url, w, h) {
+			// layer_show(title, url, w, h);
+			layer.open({
+				type: 2,
+				title: title,
+				shadeClose: true,
+				shade: 0.8,
+				area: ['90%', '500px'],
+				content: url, //iframe的url
+				end: function(){
+	            window.location.reload();//写在这里的话不管是否提交成功都会刷新这个页面 
+	            return false;
+                }
+			});
+		}
+		
+		/*用户-停用*/
+		function member_stop(obj, id, status) {
+			layer.confirm('确认要停用吗？', function (index) {
+				$.ajax({
+					type: 'POST',
+					url: "{:url('FriendshipList/update_friendship_status')}",
+					data:{
+						"id" : id,
+						"link_status" : status,
+					},
+					dataType: 'json',
+					success: function (data) {
+						if(data.error == 1){
+							$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_start(this,'+id+','+data.status+')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+							$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+							$(obj).remove();
+							layer.msg('已停用!', { icon: 5, time: 1000 });
+						}else{
+							layer.msg('已停用!', { icon: 5, time: 1000 });
+						}
+					},
+					error: function (data) {
+						console.log(data.msg);
+					},
+				});
+			});
+		}
+
+		/*用户-启用*/
+		function member_start(obj, id, status) {
+			layer.confirm('确认要启用吗？', function (index) {
+				$.ajax({
+					type: 'POST',
+					url: "{:url('FriendshipList/update_friendship_status')}",
+					data:{
+						"id" : id,
+						"link_status" : status,
+					},
+					dataType: 'json',
+					success: function (data) {
+						if(data.error == 1){
+							$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_stop(this,'+id+','+data.status+')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>');
+							$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+							$(obj).remove();
+							layer.msg('已启用!', { icon: 6, time: 1000 });
+						}else{
+							layer.msg(data.msg, { icon: 5, time: 1000 });
+						}
+					},
+					error: function (data) {
+						console.log(data.msg);
+					},
+				});
+			});
+		}
+		/*用户-编辑*/
+		function member_edit(title, url, id, w, h) {
+			// layer_show(title, url, w, h);
+			layer.open({
+				type: 2,
+				title: title,
+				shadeClose: true,
+				shade: 0.8,
+				area: ['90%', '500px'],
+				content: url, //iframe的url
+				end: function(){
+	            window.location.reload();//写在这里的话不管是否提交成功都会刷新这个页面 
+	            return false;
+                }
+			});
+		}
+		/*用户-删除*/
+		function member_del(obj, id) {
+			layer.confirm('确认要删除吗？', function (index) {
+				$.ajax({
+					type: 'POST',
+					url: "{:url('FriendshipList/delete_current_friendship')}",
+					data:{
+						"id":id
+					},
+					dataType: 'json',
+					success: function (data) {
+						$(obj).parents("tr").remove();
+						layer.msg('已删除!', { icon: 1, time: 1000 });
+					},
+					error: function (data) {
+						console.log(data.msg);
+					},
+				});
+			});
+	}
+
+function datadel(){
+	var checkedNum = $("input[name='link_id']:checked").length;
+	layer.confirm("确定删除所选项目?", function(index){
+		if(checkedNum==0){ 
+		  layer.msg("至少选择一项", { icon: 5, time: 1000 });
+		  return false;
+		}else{
+			var checkedList = new Array();
+			$("input[name='link_id']:checked").each(function(){
+				checkedList.push($(this).val());
+				});
+			$.ajax({
+				type:"POST",
+				url:"{:url('FriendshipList/del_some_friendship')}",
+				data:{
+					"id": checkedList,
+				},
+				dataType:"json",
+				success:function(data){
+					if(data.status == 1){
+						layer.msg(data.msg, { icon: 6, time: 1000 });
+						$("input[type='checkbox']:gt(0):checked").parent().parent().remove();
+					}else{
+						layer.msg(data.msg, { icon: 5, time: 1000 });	
+					}
+				},
+				error:function(data){
+
+				},
+			});
+		}
+	});
+}
+	</script>
+</body>
+
+</html>

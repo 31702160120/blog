@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <!--[if lt IE 9]> 
+<script type="text/javascript" src="Lib/html5.js"></script>
+<script type="text/javascript" src="Lib/respond.min.js"></script>
+<![endif]-->
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__STATICA__/static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/comment.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/user.css">
+    <!--自己的样式-->
+    <!--[if IE 6]> 
+<script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+<![endif]-->
+</head>
+
+<body>
+    <div class="user">
+        <div class="user-head">
+            <ul class="user-hod">
+                <li class="user-head-title" num="1"><a>登录</a></li>
+                <li class="user-head-title" num="2"><a>注册</a></li>
+                <li class="user-head-title" num="3"><a>密码重置</a></li>
+            </ul>
+        </div>
+        <div class="user-news">
+            <ul class="user-bod">
+                <li class="user-news-data user-login">
+                    <form action="" method="post" id="logoin">
+
+                        <div class="login-body">
+                            <h4>用户登录</h4>
+                            <p class="" id="msg"></p>
+                            <div class="row cl mb-30 mr-10">
+                                <label class="form-label col-xs-3 col-sm-3">用户名</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" value="" placeholder="" id="username"
+                                        name="username">
+                                </div>
+                            </div>
+                            <div class="row cl mb-10 mr-10">
+                                <label class="form-label col-xs-3 col-sm-3">密码</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="password" class="input-text" value="" placeholder="" id="password"
+                                        name="password">
+                                </div>
+                            </div>
+                            <div class="row cl mb-10 mr-10">
+                                <input name="verifycode" class="input-text size-L" type="text" placeholder="验证码"
+                                    onblur="if(this.value==''){this.value='验证码:'}"
+                                    onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
+                                <img src="{:captcha_src()}" alt="captcha"
+                                    onclick="this.src='{:captcha_src()}?'+Math.random();" />
+                            </div>
+                        <div class="login-btn">
+                            <input class="btn btn-secondary radius bts" onclick="login();" value="登录">
+                        </div>
+        </div>
+        </form>
+        </li>
+        <li class="user-news-data user-register">
+            <form action="" method="post" autoComplete="off" id="login-register">
+                <div class="login-body">
+                    <h4>用户注册</h4>
+                    <p id="register-msg" style="text-align: center"></p>
+                    <div class="row cl mb-10 mr-10">
+                        <label class="form-label col-xs-3 col-sm-3">用户名</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <!-- 防止自动填充 -->
+                            <input type="text" name="name" value="admin" style="position: absolute;z-index: -1;"
+                                disabled autocomplete="off" /><!-- 这个username会被浏览器记住，我随便用个admin-->
+                            <input type="password" name="pwd" value=" " style="position: absolute;z-index: -1;" disabled
+                                autocomplete="off" />
+
+                            <input type="text" class="input-text" value="" placeholder="" id="username" name="username"
+                                autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="row cl mb-10 mr-10">
+                        <label class="form-label col-xs-3 col-sm-3">邮箱</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" class="input-text" value="" placeholder="" id="email" name="email">
+                        </div>
+                    </div>
+                    <div class="row cl mb-10 mr-10">
+                        <label class="form-label col-xs-3 col-sm-3">密码</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="password" class="input-text" value="" placeholder="" id="password"
+                                name="password">
+                        </div>
+                    </div>
+                    <div class="row cl mb-10 mr-10">
+
+                        <label class="form-label col-xs-3 col-sm-3">确认密码</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="password" class="input-text" value="" placeholder="" id="password2"
+                                name="password2">
+                        </div>
+                    </div>
+                    <div class="login-btn">
+                        <input class="btn btn-secondary radius bts zhuce" onclick="register();" value="注册">
+                    </div>
+                </div>
+            </form>
+        </li>
+        <li class="user-news-data user-pasw">
+            <form action="" method="post" id="form-email">
+                <div class="login-body">
+                    <h4>密码重置</h4>
+                    <p id="email-msg" style="text-align: center"></p>
+                    <div class="row cl mb-30 mr-10">
+                        <label class="form-label col-xs-3 col-sm-3">邮箱号</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" class="input-text" value="" placeholder="" id="email" name="email">
+                        </div>
+                    </div>
+                    <div class="login-btn">
+                        <input class="btn btn-secondary radius bts zhuce" onclick="resetPasw();" value="密码重置">
+                    </div>
+                </div>
+            </form>
+        </li>
+        </ul>
+    </div>
+    </div>
+</body>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__STATICA__/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__STATICA__/static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".user-head-title").click(function () {
+            $(".user-head-title").find("a").css({
+                "background-color": "#f1f1f1",
+            });
+            $(this).find("a").css({
+                "background-color": "#fff",
+                " border-bottom": "none"
+            });
+            var num = $(this).attr("num");
+            if (num == 2) {
+                $(".user-bod").find("li").attr('style', 'display:none');
+                $(".user-register").css({
+                    "display": "block",
+                });
+            } else if (num == 3) {
+                $(".user-bod").find("li").attr('style', 'display:none');;
+                $(".user-pasw").css({
+                    "display": "block",
+                });
+            } else {
+                $(".user-bod").find("li").attr('style', 'display:none');;
+                $(".user-login").css({
+                    "display": "block",
+                });
+            }
+        });
+
+
+        login = function () {
+            var data = $('#logoin').serialize();
+            //序列化获得表单数据
+            var submitData = decodeURIComponent(data, true);
+            //submitData是解码后的表单数据，结果同上
+            $.ajax({
+                url: "{:url('User/login')}",
+                type: 'post',
+                data: submitData,
+                cache: false,//false是不缓存，true为缓存
+                async: true,//true为异步，false为同步
+                success: function (data) {
+                    if (data.error == 1) {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);//关闭弹出的子页面窗口
+                        window.parent.location.reload();//写在这里的话是只有提交成功了才刷新那个页面 
+                    } else {
+                        $("#msg").text(data.msg);
+                    }
+                },
+                error: function () {
+                    $("#msg").text('链接失败');
+                }
+            })
+        }
+
+        register = function () {
+            var data = $('#login-register').serialize();
+            //序列化获得表单数据
+            var submitData = decodeURIComponent(data, true);
+            //submitData是解码后的表单数据，结果同上
+            $.ajax({
+                url: "{:url('User/register')}",
+                type: 'post',
+                data: submitData,
+                cache: false,//false是不缓存，true为缓存
+                async: true,//true为异步，false为同步
+                success: function (data) {
+                    if (data.error == 1) {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);//关闭弹出的子页面窗口
+                        window.parent.location.reload();//写在这里的话是只有提交成功了才刷新那个页面 
+                    } else {
+                        $("#register-msg").text(data.msg);
+                    }
+                },
+                error: function () {
+                    $("#register-msg").text('链接失败');
+                }
+            })
+        }
+
+        resetPasw = function () {
+            var data = $('#form-email').serialize();
+            //序列化获得表单数据
+            var submitData = decodeURIComponent(data, true);
+            //submitData是解码后的表单数据，结果同上
+            $("#email-msg").text("正在发送请稍后...");
+            $.ajax({
+                url: "{:url('User/resetPassword')}",
+                type: 'post',
+                data: submitData,
+                cache: false,//false是不缓存，true为缓存
+                async: true,//true为异步，false为同步
+                success: function (data) {
+                    if (data.error == 1) {
+                        $("#email-msg").text(data.msg);
+                    } else {
+                        $("#email-msg").text(data.msg);
+                    }
+                },
+                error: function () {
+                    // $("#register-msg").text('链接失败');
+                }
+            });
+        }
+    });
+</script>
+</body>
+
+</html>

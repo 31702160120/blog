@@ -1,0 +1,62 @@
+
+{include file="public/head" /}
+
+<div class="main">
+    <nav class="breadcrumb">
+        <i class="Hui-iconfont">&#xe67f;</i>
+         <a class="maincolor" href="{:url('index/index')}">首页</a>
+         <span class="c-666 en">&gt;</span>
+         <span class="c-666">关于我</span></nav>
+    <!-- 栏目文章 -->
+    <div class="main-message">
+        <div class="codeView docs-message">
+            {$result['admin_news']|html_entity_decode}
+        </div>
+    </div>
+    <!-- 右侧边栏 -->
+    <div class="message-wei">
+        <div class="main-messageR f-r">
+
+            <!-- 友情链接 -->
+            <div class="messageR-link">
+                <div class="messageR-link-header">
+                    <i class="Hui-iconfont f-16 ">&#xe666; </i>
+                    个人信息
+                </div>
+                <div class="messageR-link-body">
+                    <img class="messageR-tou" src="{$user}">
+                    <ui>
+                        <li><span>昵称&nbsp;&nbsp;&nbsp;|&nbsp;{$result['admin_name']}</span></li>
+                        <li><span>职业&nbsp;&nbsp;&nbsp;|&nbsp;{$result['admin_porfession']}</span></li>
+                        <li><span>邮箱&nbsp;&nbsp;&nbsp;|&nbsp;{$result['admin_email']}</span></li>
+                        <li><span>微信号&nbsp;|&nbsp;{$result['admin_wx']}</span></li>
+                    </ui>
+                </div>
+            </div>
+
+            <!-- 个人微信 -->
+            <div class="messageR-wx">
+                <div class="messageR-wx-header">
+                    <i class="Hui-iconfont f-18 c-green">&#xe694; </i>
+                    个人微信
+                </div>
+                <div class="messageR-wx-body">
+                    <img src="{$wx['admin_wximg']}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 尾部 -->
+{include file="public/footer" /}
+<script type="text/javascript" src="__STATICA__/lib/jquery.min.js"></script>
+<script type="text/javascript" src="__STATICA__/static/h-ui/js/h-ui.js"></script>
+<script type="text/javascript" src="__STATICA__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+</script>
+</body>
+
+</html>

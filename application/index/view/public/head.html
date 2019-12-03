@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>{$stem.htmlTitle}</title>
+    <meta name="keywords" content="{$stem.keyword}">
+    <meta name="description" content="{$stem.describe}">
+    <!--[if lt IE 9]> 
+<script type="text/javascript" src="Lib/html5.js"></script>
+<script type="text/javascript" src="Lib/respond.min.js"></script>
+<![endif]-->
+    <link href="__STATICA__/static/h-ui/css/H-ui.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="__STATICA__/lib/Hui-iconfont/1.0.9/iconfont.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="__STATICA__/static/h-ui/css/style.css" rel="stylesheet" type="text/css" /> -->
+    <link href="__STATICA__/lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/comment.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/index.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/list.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/column.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/gbook.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/message.css">
+    <!--自己的样式-->
+    <!--[if IE 6]> 
+<script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+<![endif]-->
+</head>
+
+<body>
+    <div class="topnav">
+        <a name="top"></a>
+        <div class="wp cl">
+            <div class="logos">
+                {eq name='message["name"]' value="" }
+                <span class="r_nav">
+                    <a rel="nofollow" href="javascript:;"
+                        onclick="admin_add('{:url('User/index')}')">登录</a>
+                </span>
+                {else/}
+                    {eq name="privilege" value="1"}
+                    <div class="l"><a href="{:url('admin/index/index')}" target="_blank">您好: {$message["name"]}
+                            ({$message["logo"]})</a></div>
+                    <a class='ml-10' href="javascript:;" onclick="getout();">登出</a>
+                    {else/}
+                    <div class="l"><a href="{:url('personal/index')}">您好: {$message["name"]}
+                            ({$message["logo"]})</a></div>
+                    <a class='ml-10' href="javascript:;" onclick="getout();">登出</a>
+                    {/eq}
+                {/eq}
+                <div class="head-search">
+                    <form action="{:url('Column/search')}" method="get" id="form-search">
+                        <input type="text" class="input-text radius search-text" value="" placeholder="请输入搜索内容"
+                            id="keyword" name="keyword">
+                        <button type="submit" class="btn btn-default search-btn" onclick="jian('1')"><i
+                                class="Hui-iconfont">&#xe709;</i> 搜索
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header class="navbar-wrapper">
+        <div class="navbar navbar-black">
+            <div class="container cl head">
+                <nav class="nav navbar-nav nav-collapse f-r mr-50" role="navigation" id="Hui-navbar">
+                    <ul class="cl">
+                        <li class="current">
+                            <a href="{:url('Index/index')}">首页</a>
+                        </li>
+                        <li>
+                            <a href="{:url('Message/index')}">关于我</a>
+                        </li>
+                        {volist name="head" id="vo"}
+                        <li>
+                            <a href="{:url('Column/index',['news_cid' => $vo.column_id ])}">
+                                {$vo.column_name}</a>
+                            </li>
+                        {/volist}
+                        <li><a href="{:url('Gbook/index')}">留言</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>

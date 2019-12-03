@@ -1,0 +1,314 @@
+﻿{include file="publick/link"}
+	<style>
+		.pagination {
+			width: auto;
+			height: auto;
+			color: #333;
+			font-size: 15px;
+			float: right;
+			display: block;
+			margin-top: 30px;
+		}
+
+		.pagination:hover {
+			cursor: pointer;
+		}
+
+		.pagination li {
+			width: auto;
+			height: auto;
+			float: left;
+			padding: 2px 6px 2px 6px;
+			border: 1px solid #333333;
+			display: block;
+			margin-right: 10px;
+			text-align: center;
+			border-radius: 15%;
+		}
+
+		.pagination li.active {
+			background: #5a98de;
+			color: #fff;
+			border: 1px solid #5a98de;
+		}
+
+
+		.shai {
+			height: 31px;
+			text-align: center;
+		}
+	</style>
+<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 栏目管理 <span
+			class="c-gray en">&gt;</span> 栏目管理 <a class="btn btn-success radius r"
+			style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i
+				class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="page-container">
+		<div class="cl pd-5 bg-1 bk-gray mt-20">
+			<span class="l">
+				<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+					<i class="Hui-iconfont">&#xe6e2;</i>
+					批量删除
+				</a>
+				<a href="javascript:;" class="btn btn-primary radius"
+					onclick="member_add('添加栏目','{:url('columnList/columnAdd')}','500','510')">
+					<i class="Hui-iconfont">&#xe600;</i>
+					添加栏目</a></span>
+
+			<span class="formControls  col-xs-3 col-sm-2">
+				<select class="select shai" id="sumyear">
+					<option value="0" {$code==0 ? 'selected' : '' }>请选排序规则</option>
+					<option value="1" {$code==1 ? 'selected' : '' }>按时间升序</option>
+					<option value="2" {$code==2 ? 'selected' : '' }>按时间倒序</option>
+					<option value="3" {$code==3 ? 'selected' : '' }>停用的栏目排前</option>
+					<option value="4" {$code==4 ? 'selected' : '' }>启用的栏目排前</option>
+				</select>
+			</span>
+			<span class="r">共有数据：<strong>{$num}</strong>
+				条</span>
+		</div>
+		<div class="mt-20">
+			<table class="table table-border table-bordered table-bg">
+				<thead>
+					<tr class="text-c">
+						<th width="25"><input type="checkbox" name="" value=""></th>
+						<th width="80">ID</th>
+						<th width="100">分类id</th>
+						<th width="">栏目名</th>
+						<th width="130">添加时间</th>
+						<th width="70">状态</th>
+						<th width="100">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{volist name="data" id="vo"}
+					<tr class="text-c">
+						<td><input type="checkbox" value="{$vo.id}" name="column_id" id="column_id"></td>
+						<td>{$vo.id}</td>
+						<td>{$vo.column_id}</td>
+						<td>{$vo.column_name}</td>
+						<td>{$vo.column_time|date='y-m-d h:i:s',###}</td>
+						<td class="td-status">
+							{$vo.column_status|otherStatus}
+						</td>
+						<td class="td-manage">
+							{eq name="$vo.column_status" value="0"}
+							<a style="text-decoration:none" onClick="column_start(this,{$vo.id},{$vo.column_status})"
+								href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>
+							{else/}
+							<a style="text-decoration:none" onClick="column_stop(this,{$vo.id},{$vo.column_status})"
+								href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>
+							{/eq}
+							<a title="编辑" href="javascript:;" class="ml-5" style="text-decoration:none"
+								onclick="member_edit('编辑栏目','{:url('columnList/columnAlter',['id' => $vo.id])}')">
+								<i class="Hui-iconfont">&#xe6df;</i>
+							</a>
+							<a title="删除" href="javascript:;" class="ml-5" style="text-decoration:none"
+								onclick="member_del(this,{$vo.id})"><i class="Hui-iconfont">&#xe6e2;</i>
+							</a>
+						</td>
+					</tr>
+					{/volist}
+				</tbody>
+			</table>
+		</div>
+		<div class="">
+			{$data->render()}
+		</div>
+	</div>
+	<!--_footer 作为公共模版分离出去-->
+	{include file="publick/footer"}
+	<!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="__STATICA__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+	<script type="text/javascript" src="__STATICA__/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="__STATICA__/lib/laypage/1.2/laypage.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('.table-sort').dataTable({
+				"aaSorting": [[1, "desc"]],//默认第几个排序
+				"bStateSave": true,//状态保存
+				"aoColumnDefs": [
+					//{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+					{ "orderable": false, "aTargets": [0, 8, 9] }// 制定列不参与排序
+				]
+			});
+
+		});
+
+
+		$("#sumyear").change(function () {
+			var order = $(this).children('option:selected').val();
+			if (order != 0) {
+				$.ajax({
+					type: 'POST',
+					url: "{:url('accountList/ce')}",
+					data: {
+						"order": order,
+					},
+					dataType: 'json',
+					success: function (data) {
+						if (data.code == 1) {
+							location.href = data.data;
+						}
+					},
+					error: function (data) {
+						console.log(data.msg);
+					},
+				});
+			}
+		});
+		/*用户-添加*/
+		function member_add(title, url, w, h) {
+			// layer_show(title, url, w, h);
+			// layer.tips('Hi，我是tips', '吸附元素选择器，如#id');
+			//iframe层
+
+			layer.open({
+				type: 2,
+				title: title,
+				shadeClose: true,
+				shade: 0.8,
+				area: ['90%', '500px'],
+				content: url, //iframe的url
+				end: function(){
+	            window.location.reload();//写在这里的话不管是否提交成功都会刷新这个页面 
+	            return false;
+                }
+			});
+		}
+		
+		/*用户-停用*/
+		function column_stop(obj, id, status) {
+			layer.confirm('确认要停用吗？', function (index) {
+				$.ajax({
+					type: 'POST',
+					url: "{:url('ColumnList/update_status')}",
+					data: {
+						"column_status": status,
+						"id": id,
+					},
+					success: function (data) {
+						if (data.error == 1) {
+							$(obj).parents("tr").find(".td-manage").prepend('<a onClick="column_start(this,' + id + ',' + data.status + ')" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+							$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+							$(obj).remove();
+							layer.msg('已停用!', { icon: 5, time: 1000 });
+						} else {
+							layer.msg(data.msg, { icon: 6, time: 1000 });
+						}
+					},
+					error: function (data) {
+						console.log(data.msg);
+					},
+				});
+			});
+		}
+
+		/*用户-启用*/
+		function column_start(obj, id, status) {
+			layer.confirm('确认要启用吗？', function (index) {
+				$.ajax({
+					type: 'POST',
+					url: "{:url('ColumnList/update_status')}",
+					data: {
+						"column_status": status,
+						"id": id,
+					},
+					dataType: 'json',
+					success: function (data) {
+						console.log(data);
+						if (data.error == 1) {
+							$(obj).parents("tr").find(".td-manage").prepend('<a onClick="column_stop(this,' + id + ',' + data.status + ')" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+							$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">启用中</span>');
+							$(obj).remove();
+							layer.msg('已启用!', { icon: 6, time: 1000 });
+						} else {
+							layer.msg(data.msg, { icon: 5, time: 1000 });
+						}
+					},
+					error: function (data) {
+						console.log(data.msg);
+					},
+				});
+			});
+		}
+		/*用户-编辑*/
+		function member_edit(title, url, id, w, h) {
+			// layer_show(title, url, w, h);
+			layer.open({
+				type: 2,
+				title: title,
+				shadeClose: true,
+				shade: 0.8,
+				area: ['90%', '500px'],
+				content: url, //iframe的url
+				end: function(){
+	            window.location.reload();//写在这里的话不管是否提交成功都会刷新这个页面 
+	            return false;
+                }
+			});
+		}
+		
+		/*用户-删除*/
+		function member_del(obj, id) {
+			layer.confirm('确认要删除吗？', function (index) {
+				$.ajax({
+					type: 'POST',
+					url: "{:url('ColumnList/delete_current_column')}",
+					data: {
+						"id": id,
+					},
+					dataType: 'json',
+					success: function (data) {
+						if (data.status == 0) {
+							layer.msg(data.msg, { icon: 1, time: 1000 });
+						} else {
+							$(obj).parents("tr").remove();
+							layer.msg(data.msg, { icon: 1, time: 1000 });
+						}
+					},
+					error: function (data) {
+						console.log(data.msg);
+					},
+				});
+			});
+		}
+		function datadel() {
+			var checkedNum = $("input[name='column_id']:checked").length;
+			layer.confirm("确定删除所选项目?", function (index) {
+				if (checkedNum == 0) {
+					layer.msg("至少选择一项", { icon: 5, time: 1000 });
+					return false;
+				} else {
+					var checkedList = new Array();
+					$("input[name='column_id']:checked").each(function () {
+						checkedList.push($(this).val());
+					});
+					$.ajax({
+						type: "POST",
+						url: "{:url('ColumnList/del_some_column')}",
+						data: {
+							"id": checkedList,
+						},
+						dataType: "json",
+						success: function (data) {
+							if (data.status == 1) {
+								layer.msg(data.msg, { icon: 6, time: 1000 });
+								$("input[type='checkbox']:gt(0):checked").parent().parent().remove();
+							} else {
+								layer.msg(data.msg, { icon: 5, time: 1000 });
+							}
+						},
+						error: function (data) {
+
+						},
+					});
+				}
+			});
+		}
+	</script>
+</body>
+
+</html>
